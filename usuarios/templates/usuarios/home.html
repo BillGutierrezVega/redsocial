@@ -1,11 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Universitaria</title>
-</head>
-<body>
-    <h1>¡Bienvenido a la Red Social Universitaria!</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Inicio - Red Social Universitaria{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    <h2>Hola, {{ user.first_name|default:user.username }} 👋</h2>
+    <p>Bienvenido nuevamente. Explora las publicaciones o comparte algo tú mismo.</p>
+
+    <div>
+        <h3>📢 Últimas publicaciones</h3>
+        <p>Aún no hay publicaciones... ¡pronto podrás ver las de otros estudiantes!</p>
+    </div>
+{% else %}
+    <h2>Bienvenido a la Red Social Universitaria</h2>
+    <p>Regístrate para crear tu perfil, interactuar con otros estudiantes y compartir tus ideas.</p>
+    <p>
+        <a href="{% url 'registro_paso1' %}"><strong>Crear cuenta</strong></a> o
+        <a href="{% url 'login' %}"><strong>Iniciar sesión</strong></a>
+    </p>
+{% endif %}
+
+{% endblock %}

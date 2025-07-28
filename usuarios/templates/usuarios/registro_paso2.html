@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Registro - Paso 2: Información adicional</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="{{ form.carrera.id_for_label }}" class="form-label">Carrera</label>
+            {{ form.carrera }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.semestre.id_for_label }}" class="form-label">Semestre</label>
+            {{ form.semestre }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.foto_perfil.id_for_label }}" class="form-label">Foto de perfil</label>
+            {{ form.foto_perfil }}
+        </div>
+
+        <hr>
+        <h4>Selecciona tus gustos</h4>
+
+        {% regroup form.gustos.field.queryset by subcategoria.categoria.nombre as categorias %}
+
+        {% for categoria in categorias %}
+            <div class="mb-3">
+                <strong>{{ categoria.grouper }}</strong>
+                {% regroup categoria.list by subcategoria.nombre as subcategorias %}
+                <ul class="list-unstyled ms-3">
+                    {% for sub in subcategorias %}
+                        <li><strong>{{ sub.grouper }}</strong>
+                            <ul>
+                                {% for gusto in sub.list %}
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" name="gustos" value="{{ gusto.id }}"
+                                                {% if gusto in form.gustos.value %}checked{% endif %}>
+                                            {{ gusto.nombre }}
+                                        </label>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-success">Finalizar registro</button>
+    </form>
+</div>
+{% endblock %}
